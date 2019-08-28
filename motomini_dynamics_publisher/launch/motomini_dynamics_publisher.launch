@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="motomini_dynamics_publisher" type="motomini_dynamics_publisher_node" name="motomini_dynamics_publisher_node" output="screen" />
+</launch>
