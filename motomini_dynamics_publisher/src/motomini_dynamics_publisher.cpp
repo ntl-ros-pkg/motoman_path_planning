@@ -17,6 +17,8 @@ extern "C" {
 }
 #endif
 
+#include <chrono>
+
 using motomini_dynamics_publisher::MotominiDynamicsPublisher;
 
 MotominiDynamicsPublisher::MotominiDynamicsPublisher(ros::NodeHandle& nh)
@@ -51,6 +53,9 @@ void MotominiDynamicsPublisher::trajCallback(const trajectory_msgs::JointTraject
     ROS_DEBUG("Qt6[%d] = %f", i, Qt6[i]);
   }
 
+  using namespace std;
+  chrono::system_clock::time_point start, end;
+  start = chrono::system_clock::now();
   // Initialize model
   MotoMINI_Model_initialize();
 
@@ -70,6 +75,11 @@ void MotominiDynamicsPublisher::trajCallback(const trajectory_msgs::JointTraject
 
   // Terminate model
   MotoMINI_Model_terminate();
+
+  end = std::chrono::system_clock::now();
+
+  double time = static_cast<double>(chrono::duration_cast<chrono::microseconds>(end - start).count() / 1000.0);
+  printf("time %lf[ms]\n", time);
 
   // Publish
   torque_pub.publish(torque_msg);
